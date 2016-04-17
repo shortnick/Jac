@@ -1,0 +1,149 @@
+GeoJson spec
+
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "p0": "#7e7e7e",
+        "p1": "medium",
+        "p2": "",
+        "Name": "UW",
+        "Type": "School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.30323791503906,
+          47.65660048985082
+        ]
+      }
+    },
+    [[Repeat from 2nd opening curly to final opening curly]]
+    finish with final closing curly
+
+
+JacsPlacses.xlsx
+First row, 4 cells: Name, Description, Date, Location
+1) text (some kinda unicode?), 2) ditto? and long. comments left blank seem to be filled with '@ [venue name]', 3) [weekday] [date day] [month] [2-digit year] [hr:mn:sc](time) [+0000], 4) lat/long. only negatives have a leading sign, can start with zero, precision of ~9 to ~14, only a space separates the two coords
+
+Python Libraries -  OpenPyXL  see:http://openpyxl.readthedocs.org/en/default/usage.html
+
+native json - http://docs.python-guide.org/en/latest/scenarios/json/
+a csv to .geojson script- https://github.com/andrewjdyck/csvToGeoJSON/blob/master//csvToGeoJSON.py
+
+Animation for leaflet!!!!! https://github.com/hallahan/LeafletPlayback
+also - https://www.mapbox.com/mapbox.js/example/v1.0.0/dynamically-drawing-a-line/
+
+ogr (aka gdal) has some native geojson tools. sure would be nice to use them. you can use Spyder/Anaconda3 to open a command prompt, and run pip. however, it chokes on installing gdal:
+
+USING THIS NOW! https://github.com/karimbahgat/PyGeoj
+
+
+Custom Leaflet markers - 
+http://gis.stackexchange.com/questions/121424/leaflet-how-to-use-a-custom-marker-on-a-geojson-layer
+http://leafletjs.com/examples/custom-icons.html
+
+Map Design Wants list-
+- Not 100% width  (percentage, with a pixel width floor/max?), and taller
+XX- Background map (Stamen watercolor- http://maps.stamen.com/#watercolor)
+- zoom level styling
+- time as color gradient (7 months) try every other of this: http://www.colorhexa.com/db1126-to-755085 --- for more colors try: http://www.color-hex.com/color/d2224f
+- custom marker (foursquare F, see email), with color fill/outline?
+- highlight point and move popup box a bit off
+- connect to blog posts (date calculated)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+C:\Users\Owninator\Documents>pip install gdal
+Collecting gdal
+  Downloading GDAL-2.0.1.tar.gz (519kB)
+Building wheels for collected packages: gdal
+  Running setup.py bdist_wheel for gdal: started
+  Running setup.py bdist_wheel for gdal: finished with status 'error'
+  Complete output from command c:\anaconda3\python.exe -u -c "import setuptools, tokenize;__file__='C:\\Users\\OWNINA~1\\AppData\\Local\\Temp\\pip-build-u1kavmgs\\gdal\\setup.py';exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\r\n', '\n'), __file__, 'exec'))" bdist_wheel -d C:\Users\OWNINA~1\AppData\Local\Temp\tmpps8uncojpip-wheel- --python-tag cp35:
+  running bdist_wheel
+  running build
+  running build_py
+  creating build
+  creating build\lib.win-amd64-3.5
+  copying gdal.py -> build\lib.win-amd64-3.5
+  copying ogr.py -> build\lib.win-amd64-3.5
+  copying osr.py -> build\lib.win-amd64-3.5
+  copying gdalconst.py -> build\lib.win-amd64-3.5
+  copying gdalnumeric.py -> build\lib.win-amd64-3.5
+  creating build\lib.win-amd64-3.5\osgeo
+  copying osgeo\gdal.py -> build\lib.win-amd64-3.5\osgeo
+  copying osgeo\gdalconst.py -> build\lib.win-amd64-3.5\osgeo
+  copying osgeo\gdalnumeric.py -> build\lib.win-amd64-3.5\osgeo
+  copying osgeo\gdal_array.py -> build\lib.win-amd64-3.5\osgeo
+  copying osgeo\ogr.py -> build\lib.win-amd64-3.5\osgeo
+  copying osgeo\osr.py -> build\lib.win-amd64-3.5\osgeo
+  copying osgeo\__init__.py -> build\lib.win-amd64-3.5\osgeo
+  Fixing build\lib.win-amd64-3.5\gdal.py build\lib.win-amd64-3.5\ogr.py build\lib.win-amd64-3.5\osr.py build\lib.win-amd64-3.5\gdalconst.py build\lib.win-amd64-3.5\gdalnumeric.py build\lib.win-amd64-3.5\osgeo\gdal.py build\lib.win-amd64-3.5\osgeo\gdalconst.py build\lib.win-amd64-3.5\osgeo\gdalnumeric.py build\lib.win-amd64-3.5\osgeo\gdal_array.py build\lib.win-amd64-3.5\osgeo\ogr.py build\lib.win-amd64-3.5\osgeo\osr.py build\lib.win-amd64-3.5\osgeo\__init__.py
+  Skipping optional fixer: ws_comma
+  Fixing build\lib.win-amd64-3.5\gdal.py build\lib.win-amd64-3.5\ogr.py build\lib.win-amd64-3.5\osr.py build\lib.win-amd64-3.5\gdalconst.py build\lib.win-amd64-3.5\gdalnumeric.py build\lib.win-amd64-3.5\osgeo\gdal.py build\lib.win-amd64-3.5\osgeo\gdalconst.py build\lib.win-amd64-3.5\osgeo\gdalnumeric.py build\lib.win-amd64-3.5\osgeo\gdal_array.py build\lib.win-amd64-3.5\osgeo\ogr.py build\lib.win-amd64-3.5\osgeo\osr.py build\lib.win-amd64-3.5\osgeo\__init__.py
+  Skipping optional fixer: ws_comma
+  running build_ext
+  building 'osgeo._gdal' extension
+  error: [WinError 2] The system cannot find the file specified
+  
+  ----------------------------------------
+  Failed building wheel for gdal
+  Running setup.py clean for gdal
+Failed to build gdal
+Installing collected packages: gdal
+  Running setup.py install for gdal: started
+    Running setup.py install for gdal: finished with status 'error'
+    Complete output from command c:\anaconda3\python.exe -u -c "import setuptools, tokenize;__file__='C:\\Users\\OWNINA~1\\AppData\\Local\\Temp\\pip-build-u1kavmgs\\gdal\\setup.py';exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\r\n', '\n'), __file__, 'exec'))" install --record C:\Users\OWNINA~1\AppData\Local\Temp\pip-ehz9k28w-record\install-record.txt --single-version-externally-managed --compile:
+    running install
+    running build
+    running build_py
+    creating build
+    creating build\lib.win-amd64-3.5
+    copying gdal.py -> build\lib.win-amd64-3.5
+    copying ogr.py -> build\lib.win-amd64-3.5
+    copying osr.py -> build\lib.win-amd64-3.5
+    copying gdalconst.py -> build\lib.win-amd64-3.5
+    copying gdalnumeric.py -> build\lib.win-amd64-3.5
+    creating build\lib.win-amd64-3.5\osgeo
+    copying osgeo\gdal.py -> build\lib.win-amd64-3.5\osgeo
+    copying osgeo\gdalconst.py -> build\lib.win-amd64-3.5\osgeo
+    copying osgeo\gdalnumeric.py -> build\lib.win-amd64-3.5\osgeo
+    copying osgeo\gdal_array.py -> build\lib.win-amd64-3.5\osgeo
+    copying osgeo\ogr.py -> build\lib.win-amd64-3.5\osgeo
+    copying osgeo\osr.py -> build\lib.win-amd64-3.5\osgeo
+    copying osgeo\__init__.py -> build\lib.win-amd64-3.5\osgeo
+    Fixing build\lib.win-amd64-3.5\gdal.py build\lib.win-amd64-3.5\ogr.py build\lib.win-amd64-3.5\osr.py build\lib.win-amd64-3.5\gdalconst.py build\lib.win-amd64-3.5\gdalnumeric.py build\lib.win-amd64-3.5\osgeo\gdal.py build\lib.win-amd64-3.5\osgeo\gdalconst.py build\lib.win-amd64-3.5\osgeo\gdalnumeric.py build\lib.win-amd64-3.5\osgeo\gdal_array.py build\lib.win-amd64-3.5\osgeo\ogr.py build\lib.win-amd64-3.5\osgeo\osr.py build\lib.win-amd64-3.5\osgeo\__init__.py
+    Skipping optional fixer: ws_comma
+    Fixing build\lib.win-amd64-3.5\gdal.py build\lib.win-amd64-3.5\ogr.py build\lib.win-amd64-3.5\osr.py build\lib.win-amd64-3.5\gdalconst.py build\lib.win-amd64-3.5\gdalnumeric.py build\lib.win-amd64-3.5\osgeo\gdal.py build\lib.win-amd64-3.5\osgeo\gdalconst.py build\lib.win-amd64-3.5\osgeo\gdalnumeric.py build\lib.win-amd64-3.5\osgeo\gdal_array.py build\lib.win-amd64-3.5\osgeo\ogr.py build\lib.win-amd64-3.5\osgeo\osr.py build\lib.win-amd64-3.5\osgeo\__init__.py
+    Skipping optional fixer: ws_comma
+    running build_ext
+    building 'osgeo._gdal' extension
+    error: [WinError 2] The system cannot find the file specified
+    
+    ----------------------------------------
+Command "c:\anaconda3\python.exe -u -c "import setuptools, tokenize;__file__='C:\\Users\\OWNINA~1\\AppData\\Local\\Temp\\pip-build-u1kavmgs\\gdal\\setup.py';exec(compile(getattr(tokenize, 'open', open)(__file__).read().replace('\r\n', '\n'), __file__, 'exec'))" install --record C:\Users\OWNINA~1\AppData\Local\Temp\pip-ehz9k28w-record\install-record.txt --single-version-externally-managed --compile" failed with error code 1 in C:\Users\OWNINA~1\AppData\Local\Temp\pip-build-u1kavmgs\gdal\
+
+

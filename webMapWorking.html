@@ -7,6 +7,9 @@
     <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
 
 <style>
+    .leaflet-popup-content{
+        width:400px;
+    }
     #map {
         width: 80%;
         height: 600px;
@@ -17,16 +20,33 @@
     <div id="map"></div>
     <script src="JacsPlaces.geojson" type="text/javascript"></script>
     <script>
+
+    var lastClickedLoc;
+
+    function clickFeature(event) {
+        if (lastClickedLoc){
+            lastClickedLoc.setStyle(geojsonMarkerOptions);
+        }
+        
+        lastClickedLoc=event.target;
+
+        event.target.setStyle({color:"#12bf02", weight:3,radius:10,fillOpacity:1});
+        console.log(event)
+    }
+    
+
      <!--This one does the pop ups, the .Name is the left half of the property being called  -->
-        function onEachFeature(feature, layer) {
+       function onEachFeature(feature, layer) {
+            layer.on({click: clickFeature})
             layer.bindPopup(feature.properties.Name+"<br>"+feature.properties.Description+"<br>"+feature.properties.Chron);}
 
        
 
-        <!--This one is the base map-->
+
+        <!--This one is the base map tileset-->
         var layer = new L.StamenTileLayer("watercolor");
 
-        <!--This one does the pop ups-->
+        <!--This one does the Markers-->
         var geojsonMarkerOptions = {
             radius: 7,
             fillColor: "#864575",
@@ -36,21 +56,21 @@
             fillOpacity: 0.5
         };
 
-
+        <!-- Declares the map instance -->
         var map = new L.Map("map", {
             center: new L.LatLng(47.606, -122.3),
             zoom: 12
             });
-
         map.addLayer(layer);
         
-
-        L.geoJson(JacPoints,{
+        <!-- Declares the points -->
+        var theLayer = L.geoJson(JacPoints,{
             onEachFeature: onEachFeature,
             pointToLayer: function(feature, latlng) {
                 return L.circleMarker(latlng, geojsonMarkerOptions);
             }
         }).addTo(map);
+        console.log(theLayer)
 
     </script>
 </body>

@@ -14,13 +14,35 @@
     #map {
         width: 80%;
         height: 600px;
-    }
+    };
+
+
 </style>
 </head>
 <body>
     <div id="map"></div>
     <script src="JacsPlaces.geojson" type="text/javascript"></script>
     <script>
+
+    function colorWheel(dayCount) {
+        var rangeLib = []
+        var padding = 30;
+        var increment= 18;
+        var stopHere = 210;
+        var a =(0-padding); 
+        var b = increment;
+        //finish this for range generation, add colorHex array
+        if (a < 0) {
+            rangeLib.push(_.range(a,b));
+            a = b;
+        }
+        else if (a<stopHere){
+            b = a +increment;
+            rangeLib.push(_.range(a, b));
+            a = b;
+        }
+    };
+        
 
     var lastClickedLoc;
 
@@ -37,9 +59,15 @@
 
      <!--This one does the pop ups, the .Name is the left half of the property being called  -->
        function onEachFeature(feature, layer) {
+            var starting = moment.utc("2015-04-01","YYYY-MM-DD");
+            var featureChron = feature.properties.Chron;
+            var featureDate = moment.utc(featureChron,"DD-MMM-YY hh:mm:ss Z");
+            var dayCount = featureDate.diff(starting, 'days');
+
             layer.on({click: clickFeature})
-            layer.bindPopup(feature.properties.Name+"<br>"+feature.properties.Description+"<br>"+feature.properties.Chron+"<br>"+moment(feature.properties.Chron,"DD-MMM-YY").diff(moment(("2015-04-01","YYYY-MM-DD"), 'days')));
-            //the moment thing passes but seems to be calculating wrong, maybe http://momentjs.com/docs/#/displaying/difference/ instead or maybe inputting april 1 as 'moment correct date'
+            layer.bindPopup(feature.properties.Name+"<br>"+feature.properties.Description+"<br>"+featureChron+"<br>"+dayCount);
+            console.log(featureDate);
+            //date calculation works now, but it's still translated into Pacific time
     }
 
        

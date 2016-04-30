@@ -2,9 +2,10 @@
 <html>
 <head>
     <title>Jac map!</title>
-   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
     <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+    <script src="http://momentjs.com/downloads/moment.js"></script> 
 
 <style>
     .leaflet-popup-content{
@@ -31,20 +32,21 @@
         lastClickedLoc=event.target;
 
         event.target.setStyle({color:"#12bf02", weight:3,radius:10,fillOpacity:1});
-        console.log(event)
     }
     
 
      <!--This one does the pop ups, the .Name is the left half of the property being called  -->
        function onEachFeature(feature, layer) {
             layer.on({click: clickFeature})
-            layer.bindPopup(feature.properties.Name+"<br>"+feature.properties.Description+"<br>"+feature.properties.Chron);}
+            layer.bindPopup(feature.properties.Name+"<br>"+feature.properties.Description+"<br>"+feature.properties.Chron+"<br>"+moment(feature.properties.Chron,"DD-MMM-YY").diff(moment(("2015-04-01","YYYY-MM-DD"), 'days')));
+            //the moment thing passes but seems to be calculating wrong, maybe http://momentjs.com/docs/#/displaying/difference/ instead or maybe inputting april 1 as 'moment correct date'
+    }
 
        
 
 
         <!--This one is the base map tileset-->
-        var layer = new L.StamenTileLayer("watercolor");
+        var baselayer = new L.StamenTileLayer("watercolor");
 
         <!--This one does the Markers-->
         var geojsonMarkerOptions = {
@@ -53,7 +55,8 @@
             color: "#060606",
             weight: 1,
             opacity: 1,
-            fillOpacity: 0.5
+            fillOpacity: 0.5,
+            popupAnchor: [100,100]
         };
 
         <!-- Declares the map instance -->
@@ -61,7 +64,7 @@
             center: new L.LatLng(47.606, -122.3),
             zoom: 12
             });
-        map.addLayer(layer);
+        map.addLayer(baselayer);
         
         <!-- Declares the points -->
         var theLayer = L.geoJson(JacPoints,{

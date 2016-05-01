@@ -1,11 +1,13 @@
 
 <html>
 <head>
+
     <title>Jac map!</title>
    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
-    <script src="http://momentjs.com/downloads/moment.js"></script> 
+    <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0">//this is the baselayer</script>
+    <script src="http://momentjs.com/downloads/moment.js">//this is for calculating time/date</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js">//this is a utility library</script> 
 
 <style>
     .leaflet-popup-content{
@@ -20,27 +22,51 @@
 </style>
 </head>
 <body>
+
     <div id="map"></div>
     <script src="JacsPlaces.geojson" type="text/javascript"></script>
     <script>
 
+    //Date groups & colorWheel() pre-calculation
+    var rangeLib = []
+    //number of days in a group
+    var increment= 18;
+    //total number of days
+    var stopHere = 210;
+    //fudge factor in number of days 
+    var padding = 30;
+    var a =(0-padding); 
+    var b = increment;
+    do {
+         if (a < 0) {
+                rangeLib.push(_.range(a,b));
+                a = b;
+            }
+            else if (a<stopHere){
+                b = a +increment;
+                rangeLib.push(_.range(a, b));
+                a = b;
+            }
+            else {
+                b = stopHere + padding;
+                rangeLib.push(_.range(a, b));
+                break
+            }
+    } while (a<(stopHere+increment))
+    console.log(rangeLib[12])
+
+
     function colorWheel(dayCount) {
-        var rangeLib = []
-        var padding = 30;
-        var increment= 18;
-        var stopHere = 210;
-        var a =(0-padding); 
-        var b = increment;
-        //finish this for range generation, add colorHex array
-        if (a < 0) {
-            rangeLib.push(_.range(a,b));
-            a = b;
-        }
-        else if (a<stopHere){
-            b = a +increment;
-            rangeLib.push(_.range(a, b));
-            a = b;
-        }
+        //number of hex colors should be equal to stopHere/increment
+        var colorLib= ['#db1126','#d41a40','#cd2256','#c52968','#be3078','#b73684','#b03c8d','#a94194','#a24599','#9a499b','#8c4c93','#804e8c','#804e8c']
+
+        for (var key in rangeLib){
+            var section = rangeLib[key]
+           if (_.lastIndexOf(section,dayCount) >= 0)  {
+                return colorLib[key];
+           }
+       } 
+          
     };
         
 
@@ -56,17 +82,21 @@
         event.target.setStyle({color:"#12bf02", weight:3,radius:10,fillOpacity:1});
     }
     
+    var starting = moment.utc("2015-04-01","YYYY-MM-DD");
+    function getDayCount(featureDate){
+        return featureDate.diff(starting, 'days');
+    }
 
      <!--This one does the pop ups, the .Name is the left half of the property being called  -->
-       function onEachFeature(feature, layer) {
-            var starting = moment.utc("2015-04-01","YYYY-MM-DD");
+       function createPopUps(feature, layer) {
             var featureChron = feature.properties.Chron;
             var featureDate = moment.utc(featureChron,"DD-MMM-YY hh:mm:ss Z");
-            var dayCount = featureDate.diff(starting, 'days');
+            var dayCount = getDayCount(featureDate);
 
             layer.on({click: clickFeature})
             layer.bindPopup(feature.properties.Name+"<br>"+feature.properties.Description+"<br>"+featureChron+"<br>"+dayCount);
-            console.log(featureDate);
+            //console.log(colorWheel(dayCount));
+            //console.log(dayCount)
             //date calculation works now, but it's still translated into Pacific time
     }
 
@@ -79,7 +109,6 @@
         <!--This one does the Markers-->
         var geojsonMarkerOptions = {
             radius: 7,
-            fillColor: "#864575",
             color: "#060606",
             weight: 1,
             opacity: 1,
@@ -96,8 +125,11 @@
         
         <!-- Declares the points -->
         var theLayer = L.geoJson(JacPoints,{
-            onEachFeature: onEachFeature,
+            onEachFeature: createPopUps,
             pointToLayer: function(feature, latlng) {
+                var featureDate = moment.utc(feature.properties.Chron,"DD-MMM-YY hh:mm:ss Z");
+                var dayCount = getDayCount(featureDate);
+                geojsonMarkerOptions.fillColor = colorWheel(dayCount);
                 return L.circleMarker(latlng, geojsonMarkerOptions);
             }
         }).addTo(map);
